@@ -1,3 +1,4 @@
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -57,15 +58,20 @@ public class PaymentPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
+    @Step("Открыть сайт МТС и принять cookies")
     public void open() {
+        //driver.get("https://www.mts.by/");
+        //driver.findElement(cookieAgreeButton).click();
         driver.get("https://www.mts.by/");
-        driver.findElement(cookieAgreeButton).click();
+        wait.until(ExpectedConditions.elementToBeClickable(cookieAgreeButton)).click();
     }
 
+    @Step("Получить заголовок блока онлайн-пополнения")
     public String getPaymentTitle() {
         return driver.findElement(paymentTitle).getText();
     }
 
+    @Step("Проверить отображение логотипов платёжных систем")
     public boolean arePaymentLogosDisplayed() {
         List<WebElement> logos = driver.findElements(paymentLogos);
         if (logos.isEmpty()) {
@@ -79,10 +85,12 @@ public class PaymentPage {
         return true;
     }
 
+    @Step("Получить количество логотипов платёжных систем")
     public int getPaymentLogosCount() {
         return driver.findElements(paymentLogos).size();
     }
 
+    @Step("Перейти по ссылке 'Подробнее о сервисе'")
     public void clickDetailsLink() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(detailsLink)).click();
     }
@@ -91,20 +99,24 @@ public class PaymentPage {
         return driver.getCurrentUrl();
     }
 
+    @Step("Заполнить форму оплаты услуг связи")
     public void fillPaymentForm(String phone, String amount) {
         driver.findElement(connectionPhoneField).sendKeys(phone);
         driver.findElement(connectionAmountField).sendKeys(amount);
     }
 
+    @Step("Нажать кнопку 'Продолжить'")
     public void clickContinue() {
         driver.findElement(continueButton).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(paymentWindow));
     }
 
+    @Step("Проверить отображение окна оплаты")
     public boolean isPaymentWindowDisplayed() {
         return driver.findElement(paymentWindow).isDisplayed();
     }
 
+    @Step("Получить текст плейсхолдера соответствующего поля")
     public String getConnectionPhonePlaceholder() {
         return getPlaceholder(driver.findElement(connectionPhoneField));
     }
@@ -153,10 +165,12 @@ public class PaymentPage {
         return getPlaceholder(driver.findElement(arrearsEmailField));
     }
 
+    @Step("Открыть список типов услуг")
     public void clickServiceTypeButton() {
         driver.findElement(serviceTypeButton).click();
     }
 
+    @Step("Выбрать тип услуги")
     public void selectServiceType(String serviceType) {
         List<WebElement> options = driver.findElements(serviceTypeOption);
         for (WebElement option : options) {
@@ -203,6 +217,7 @@ public class PaymentPage {
         return driver.findElements(paymentSystemIcons);
     }
 
+    @Step("Переключиться на окно оплаты и дождаться его загрузки")
     public void waitOfVisibilityFrame() {
         wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(paymentFrame));
         wait.until(ExpectedConditions.visibilityOfElementLocated(paymentFrameContainer));

@@ -1,17 +1,15 @@
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.util.Locale;
 import java.time.Duration;
+import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestClass {
     WebDriver driver;
@@ -39,17 +37,20 @@ public class TestClass {
         driver.quit();
     }
 
+    @DisplayName("Отображается корректный заголовок блока онлайн-пополнения")
     @Test
     public void shouldDisplayOnlinePaymentBlockTitle() {
         assertEquals("ОНЛАЙН ПОПОЛНЕНИЕ\n" + "БЕЗ КОМИССИИ", page.getPaymentTitle());
     }
 
+    @DisplayName("Логотипы платёжных систем отображаются в ожидаемом количестве")
     @Test
     public void shouldDisplayPaymentSystemLogos() {
         assertTrue(page.arePaymentLogosDisplayed());
         assertEquals(5, page.getPaymentLogosCount());
     }
 
+    @DisplayName("Ссылка 'Подробнее о сервисе' ведёт на страницу с информацией об оплате")
     @Test
     public void shouldOpenServiceDetailsPageByLink() {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(5));
@@ -61,6 +62,7 @@ public class TestClass {
         assertEquals("https://www.mts.by/help/poryadok-oplaty-i-bezopasnost-internet-platezhey/", page.getCurrentUrl());
     }
 
+    @DisplayName("Отображение окна оплаты после заполнения формы услуги связи")
     @Test
     public void shouldSubmitCommunicationServicePayment() {
         page.fillPaymentForm(phone, String.valueOf(sum));
@@ -68,6 +70,7 @@ public class TestClass {
         assertTrue(page.isPaymentWindowDisplayed());
     }
 
+    @DisplayName("Отображаются корректные подсказки в полях формы оплаты услуг связи")
     @Test
     public void shouldDisplayCorrectPlaceholdersForConnection() {
         page.clickServiceTypeButton();
@@ -77,6 +80,7 @@ public class TestClass {
         assertEquals("E-mail для отправки чека", page.getConnectionEmailPlaceholder());
     }
 
+    @DisplayName("Отображаются корректные подсказки в полях формы оплаты домашнего интернета")
     @Test
     public void shouldDisplayCorrectPlaceholdersForInternet() {
         page.clickServiceTypeButton();
@@ -86,6 +90,7 @@ public class TestClass {
         assertEquals("E-mail для отправки чека", page.getInternetEmailPlaceholder());
     }
 
+    @DisplayName("Отображаются корректные подсказки в полях формы оплаты рассрочки")
     @Test
     public void shouldDisplayCorrectPlaceholdersForInstallment() {
         page.clickServiceTypeButton();
@@ -95,6 +100,7 @@ public class TestClass {
         assertEquals("E-mail для отправки чека", page.getInstallmentEmailPlaceholder());
     }
 
+    @DisplayName("Отображаются корректные подсказки в полях формы оплаты задолженности")
     @Test
     public void shouldDisplayCorrectPlaceholdersForArrears() {
         page.clickServiceTypeButton();
@@ -103,9 +109,9 @@ public class TestClass {
         assertEquals("Сумма", page.getArrearsAmountPlaceholder());
         assertEquals("E-mail для отправки чека", page.getArrearsEmailPlaceholder());
     }
-
+@DisplayName("Отображаются корректные данные в окне оплаты услуг связи")
     @Test
-    public void shouldDisplayCorrectLabels() {
+    public void shouldDisplayCorrectPaymentDetails() {
         page.fillPaymentForm(phone, String.valueOf(sum));
         page.clickContinue();
         page.waitOfVisibilityFrame();
